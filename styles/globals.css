@@ -13,9 +13,20 @@
     --foreground: #ededed;
   }
 }
+@font-face {
+  font-family: 'CustomFont';
+  src: url('customfont.ttf') format('truetype');
+}
+
 
 body {
   color: var(--foreground);
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
+}
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'CustomFont';
 }
