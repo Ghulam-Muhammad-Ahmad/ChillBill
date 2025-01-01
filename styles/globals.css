@@ -30,3 +30,8 @@ body {
   box-sizing: border-box;
   font-family: 'CustomFont';
 }
+.rdt_TableHead *{
+  font-size: 1.125rem;
+line-height: 1.75rem;
+font-weight:600;
+}

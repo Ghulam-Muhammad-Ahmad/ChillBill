@@ -11,10 +11,12 @@ export default NextAuth({
       credentials: {
         email: { label: 'Email', type: 'email' },
         password: { label: 'Password', type: 'password' },
+        username: { label: 'Username', type: 'text' },
+        currency: { label: 'Currency', type: 'text' },
       },
       async authorize(credentials) {
         await connect();
-        const { email, password } = credentials;
+        const { email, password, username, currency } = credentials;
 
         const user = await User.findOne({ email });
         if (!user) {
@@ -26,7 +28,7 @@ export default NextAuth({
           throw new Error('Invalid password');
         }
 
-        return { email: user.email }; // Return the user object
+        return { email: user.email, username: user.username, currency: user.currency }; // Return the user object with username and currency
       },
     }),
   ],
@@ -38,6 +40,8 @@ export default NextAuth({
     async jwt({ token, user }) {
       if (user) {
         token.email = user.email;
+        token.username = user.username; // Store the username
+        token.currency = user.currency; // Store the currency
         token.iat = Date.now(); // Store the issued time
       }
 
@@ -50,6 +54,8 @@ export default NextAuth({
     },
     async session({ session, token }) {
       session.user.email = token.email;
+      session.user.username = token.username; // Set the username in the session
+      session.user.currency = token.currency; // Set the currency in the session
       return session;
     },
   },

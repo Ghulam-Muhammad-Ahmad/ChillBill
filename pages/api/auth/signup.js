@@ -5,7 +5,7 @@ import connect from '../../../lib/mongodb';
 export default async function handler(req, res) {
   if (req.method === 'POST') {
     await connect();
-    const { email, password } = req.body;
+    const { email, password, username, currency } = req.body;
 
     // Check if user already exists
     const existingUser = await User.findOne({ email });
@@ -19,6 +19,8 @@ export default async function handler(req, res) {
     const newUser = new User({
       email,
       password: hashedPassword,
+      username,
+      currency,
     });
 
     try {

@@ -7,6 +7,8 @@ const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [repeatPassword, setRepeatPassword] = useState('');
+  const [username, setUsername] = useState('');
+  const [currency, setCurrency] = useState('');
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -31,7 +33,7 @@ const router = useRouter();
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ email, password }),
+      body: JSON.stringify({ email, password, username, currency }),
     });
 
     const data = await res.json();
@@ -60,6 +62,31 @@ const router = useRouter();
           required
           value={email}
           onChange={(e) => setEmail(e.target.value)}
+        />
+      </div>
+      <div className="mb-5 w-full">
+        <label htmlFor="username" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your username</label>
+        <input
+          type="text"
+          id="username"
+          className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-secondary focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-secondary dark:focus:border-secondary dark:shadow-sm-light"
+          placeholder="Your username"
+          required
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+        />
+      </div>
+      <div className="mb-5 w-full">
+        <label htmlFor="currency" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your currency symbol</label>
+        <input
+          type="text"
+          id="currency"
+          className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-secondary focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-secondary dark:focus:border-secondary dark:shadow-sm-light"
+          placeholder="Your currency"
+          maxLength="5"
+          required
+          value={currency}
+          onChange={(e) => setCurrency(e.target.value)}
         />
       </div>
       <div className="mb-5 w-full">
