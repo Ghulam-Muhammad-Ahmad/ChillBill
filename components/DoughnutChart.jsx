@@ -6,13 +6,13 @@ import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 const DoughnutChart = ({ data, currency }) => {
-  // Group by categoryId and sum amounts
+  // Group by categoryName and sum amounts
   const categoryMap = data.reduce((acc, item) => {
-    const categoryId = item.categoryId;
-    if (!acc[categoryId]) {
-      acc[categoryId] = 0;
+    const categoryName = item.categoryName;
+    if (!acc[categoryName]) {
+      acc[categoryName] = 0;
     }
-    acc[categoryId] += item.amount;
+    acc[categoryName] += item.amount;
     return acc;
   }, {});
 
@@ -33,7 +33,7 @@ const DoughnutChart = ({ data, currency }) => {
     responsive: true,
     plugins: {
       legend: {
-        position: 'top',
+        display: false, // Hide legend
       },
       tooltip: {
         callbacks: {
@@ -44,6 +44,11 @@ const DoughnutChart = ({ data, currency }) => {
           }
         }
       }
+    },
+    // Size configuration
+    options: {
+      height: '50%', // Height of the chart
+      width: '50%', // Width of the chart
     }
   };
 
