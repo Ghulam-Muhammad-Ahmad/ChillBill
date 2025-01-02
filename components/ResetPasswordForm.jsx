@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useSession } from 'next-auth/react'; // Updated import
 
-function ResetPasswordForm() {
+function ResetPasswordForm({settingstate}) {
   const [password, setPassword] = useState('');
   const [repeatPassword, setRepeatPassword] = useState('');
   const [error, setError] = useState('');
@@ -39,7 +39,8 @@ function ResetPasswordForm() {
   };
 
   return (
-    <form className="flex justify-center items-center flex-col w-full" onSubmit={handleSubmit}>
+    <div className={settingstate != "password" ? "hidden" : "shown"}>
+    <form className="flex justify-center items-center flex-col max-w-[1200px] mx-auto my-5" onSubmit={handleSubmit}>
       <div className="mb-5 w-full">
         <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">New password</label>
         <input
@@ -71,6 +72,8 @@ function ResetPasswordForm() {
         {loading ? 'Resetting...' : 'Reset password'}
       </button>
     </form>
+    </div>
+
   );
 }
 

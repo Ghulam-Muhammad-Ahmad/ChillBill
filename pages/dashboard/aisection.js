@@ -1,8 +1,18 @@
-import React from 'react'
-
+import Chatbot from '@/components/Chatbot'
+import DashboardLayout from '@/components/DashboardLayout'
+import React, { useEffect } from 'react'
 function aisection() {
+  useEffect(() => {
+    document.title = 'Ask AI | Dashboard'
+
+  }, [])
+  
   return (
-    <div>aisection</div>
+    <>
+    <DashboardLayout>
+<Chatbot />
+    </DashboardLayout>
+  </>
   )
 }
 

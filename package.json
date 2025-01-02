@@ -9,9 +9,11 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@google/generative-ai": "^0.21.0",
     "axios": "^1.7.9",
     "bcryptjs": "^2.4.3",
     "chart.js": "^4.4.7",
+    "dotenv": "^16.4.7",
     "flowbite": "^2.5.2",
     "mongoose": "^8.9.2",
     "next": "15.1.3",

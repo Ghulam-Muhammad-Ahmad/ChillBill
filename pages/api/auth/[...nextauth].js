@@ -11,52 +11,75 @@ export default NextAuth({
       credentials: {
         email: { label: 'Email', type: 'email' },
         password: { label: 'Password', type: 'password' },
-        username: { label: 'Username', type: 'text' },
-        currency: { label: 'Currency', type: 'text' },
       },
       async authorize(credentials) {
         await connect();
-        const { email, password, username, currency } = credentials;
+        const { email, password } = credentials;
 
+        // Find user by email
         const user = await User.findOne({ email });
         if (!user) {
           throw new Error('No user found with the provided email');
         }
 
+        // Validate password
         const isValid = await verifyPassword(password, user.password);
         if (!isValid) {
           throw new Error('Invalid password');
         }
 
-        return { email: user.email, username: user.username, currency: user.currency }; // Return the user object with username and currency
+        // Return the user object with required details
+        return {
+          email: user.email,
+          username: user.username,
+          currency: user.currency,
+        };
       },
     }),
   ],
+
   session: {
     jwt: true,
-    maxAge: 24 * 60 * 60, // Set session max age to 24 hours
+    maxAge: 24 * 60 * 60, // Session lasts for 24 hours
   },
+
   callbacks: {
-    async jwt({ token, user }) {
+    // Handle JWT updates
+    async jwt({ token, user, trigger, session }) {
       if (user) {
+        // Store the user details in the token when logging in or when the user data changes
         token.email = user.email;
-        token.username = user.username; // Store the username
-        token.currency = user.currency; // Store the currency
-        token.iat = Date.now(); // Store the issued time
+        token.username = user.username;
+        token.currency = user.currency;
       }
 
-      // Optional: Extend JWT expiration (e.g., 7 days)
-      if (token.iat && Date.now() - token.iat > 6 * 24 * 60 * 60 * 1000) { // 6 days
-        token.exp = Math.floor(Date.now() / 1000) + 7 * 24 * 60 * 60; // Set expiration to 7 days
+      // If the trigger is 'update', refresh the token with new user data
+      if (trigger === 'update') {
+        // If the user is being updated, make sure to update relevant fields
+        token.username = user.username;
+        token.currency = user.currency;
+      }
+
+      // Optionally extend JWT expiration (example: 6 days)
+      if (token.iat && Date.now() - token.iat * 1000 > 6 * 24 * 60 * 60 * 1000) {
+        token.exp = Math.floor(Date.now() / 1000) + 7 * 24 * 60 * 60; // Extend for 7 days
       }
 
       return token;
     },
+
+    // Handle session updates
     async session({ session, token }) {
       session.user.email = token.email;
-      session.user.username = token.username; // Set the username in the session
-      session.user.currency = token.currency; // Set the currency in the session
+      session.user.username = token.username; // Set updated username in session
+      session.user.currency = token.currency; // Set updated currency in session
       return session;
+    },
+  },
+
+  events: {
+    async createUser(message) {
+      console.log('A new user has been created:', message);
     },
   },
 });
