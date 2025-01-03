@@ -1,52 +1,47 @@
+"use client";
 import Link from 'next/link';
-import Image from 'next/image';
+import dynamic from 'next/dynamic';
+import LandingpageMarquee from './LandingpageMarquee';
+import Landingpagefeatures from './Landingpagefeatures';
+import Landinggetstarted from './Landinggetstarted';
+import Landinghowworks from './Landinghowworks';
+import Landingfaqs from './Landingfaqs';
+import 'flowbite';
+
+// Dynamically import the Lottie component with SSR disabled
+const Lottie = dynamic(() => import('react-lottie-player'), { ssr: false });
 
 export default function LandingPage() {
     return (
         <div>
             {/* Hero Section */}
-            <section className="bg-gradient-to-r from-blue-500 to-teal-500 pt-[90px] text-white min-h-[820px] max-h-fit flex flex-col items-center justify-center text-center">
-                <h1 className="text-5xl font-bold mb-4">Welcome to Our Website</h1>
-                <p className="text-xl mb-6">Your journey to greatness starts here. Let us help you grow.</p>
-                <Link href="#features">
-                    <button className="bg-primary hover:bg-secondary focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center text-white dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Explore Features</button>
-                </Link>
-                <Image src="/dashboard-mockup.png" alt="Description of the image" className='mt-5' width={600} height={150} />
-            </section>
-
-            {/* Features Section */}
-            <section id="features" className="py-16 px-6 bg-white">
-                <div className="max-w-screen-xl mx-auto text-center">
-                    <h2 className="text-4xl font-bold mb-8">Our Amazing Features</h2>
-                    <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
-                        <div className="p-6 shadow-lg rounded-lg bg-gray-50">
-                            <h3 className="text-2xl font-semibold mb-4">Feature 1</h3>
-                            <p className="text-gray-600">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                        </div>
-                        <div className="p-6 shadow-lg rounded-lg bg-gray-50">
-                            <h3 className="text-2xl font-semibold mb-4">Feature 2</h3>
-                            <p className="text-gray-600">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                        </div>
-                        <div className="p-6 shadow-lg rounded-lg bg-gray-50">
-                            <h3 className="text-2xl font-semibold mb-4">Feature 3</h3>
-                            <p className="text-gray-600">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                        </div>
+            <section className="border-b-2 border-black">
+                <div className="pt-[110px] pb-[0px] text-black max-h-fit  flex items-center justify-center text-center max-w-screen-xl mx-auto">
+                    <div className="text-black w-1/2 flex justify-start flex-col pb-8">
+                        <h1 className="text-6xl font-bold mb-4 text-start">Track. Categorize. <br></br> Save. Simplify</h1>
+                        <p className="text-2xl mb-6 text-start">Your journey to greatness starts here. <br></br> Let us help you grow.</p>
+                        <Link href="/signup" className="text-white w-fit bg-primary hover:bg-secondary focus:outline-none font-bold uppercase text-base px-[28px] py-[10px] rounded-[12px] border-2 border-black text-start dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" style={{ boxShadow: '4px 4px 0 0 #000', transition: 'box-shadow 0.3s' }} onMouseEnter={(e) => e.currentTarget.style.boxShadow = 'none'} onMouseLeave={(e) => e.currentTarget.style.boxShadow = '4px 4px 0 0 #000'}>Take Control Today</Link>
+                    </div>
+                    <div className="w-1/2">
+                        <Lottie
+                            loop
+                            animationData={require('../public/lottie/moneytrack.json')} // Ensure the correct relative path
+                            play
+                            style={{ width: '100%', height: '100%' }}
+                        />
                     </div>
                 </div>
             </section>
+            <LandingpageMarquee />
+            <Landingpagefeatures />
+            <Landinggetstarted />
+            <Landinghowworks />
 
-            {/* Call-to-Action Section */}
-            <section className="bg-blue-600 text-white py-16 text-center">
-                <h2 className="text-3xl font-bold mb-6">Ready to Get Started?</h2>
-                <p className="text-lg mb-8">Join us today and start your journey.</p>
-                <Link href="#contact">
-                    <button className="bg-primary hover:bg-secondary focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center text-white dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Contact Us</button>
-                </Link>
-            </section>
+           <Landingfaqs />
 
             {/* Footer Section */}
-            <footer className="bg-gray-800 text-white text-center py-4">
-                <p>&copy; 2024 My Landing Page. All rights reserved.</p>
+            <footer className="bg-secondary text-white text-center py-4">
+                <p>&copy; {new Date().getFullYear()} ChillBill. All rights reserved.</p>
             </footer>
         </div>
     );

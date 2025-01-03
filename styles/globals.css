@@ -43,3 +43,33 @@ font-weight:600;
   border-radius: 15px;
   background: transparent;
 }
+.hoverbordered:hover{
+  box-shadow: rgb(0, 0, 0) 4px 4px 0px 0px;
+  outline: none;
+}
+.hoverbordered{
+  transition: box-shadow 0.3s;
+
+}
+.cardmain:after {
+  content:"";
+  height:2px;
+  width:96%;
+  margin:auto;
+  display:block;
+  z-index:1;
+  position:absolute;
+  top:50px;
+  right:10px;
+  transform:translateX(1px);
+  border:2px dashed #000;
+}
+.cardmain{
+  position:relative;
+}
+.iconitem {
+  background:#fff;
+  position:relative;
+  outline:5px solid #fff;
+  z-index:20 !important;
+}
