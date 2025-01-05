@@ -13,7 +13,7 @@ function Landinggetstarted() {
     </Link>
         </div>
         <div className="mt-[-50px] mb-[-60px]">
-            <Image src='/Investing-bro.svg' width={850} height={550} />
+            <Image src='/Investing-bro.svg' width={850} height={550} alt='Get Started' />
         </div>
 </section>
   )

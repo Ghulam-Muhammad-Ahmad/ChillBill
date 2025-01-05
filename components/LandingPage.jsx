@@ -7,6 +7,7 @@ import Landinggetstarted from './Landinggetstarted';
 import Landinghowworks from './Landinghowworks';
 import Landingfaqs from './Landingfaqs';
 import 'flowbite';
+import Landingcontact from './Landingcontact';
 
 // Dynamically import the Lottie component with SSR disabled
 const Lottie = dynamic(() => import('react-lottie-player'), { ssr: false });
@@ -36,8 +37,8 @@ export default function LandingPage() {
             <Landingpagefeatures />
             <Landinggetstarted />
             <Landinghowworks />
-
-           <Landingfaqs />
+            <Landingcontact />
+            <Landingfaqs />
 
             {/* Footer Section */}
             <footer className="bg-secondary text-white text-center py-4">

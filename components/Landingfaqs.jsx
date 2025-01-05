@@ -29,7 +29,7 @@ function Landingfaqs() {
             <h2>
               <button
                 type="button"
-                className={`flex items-center justify-between w-full p-5 font-medium text-gray-500 border-2 border-black dark:text-gray-400  dark:hover:bg-gray-800 ${index === 0 ? 'rounded-t-[12px]' : ''} ${index === 3 ? 'rounded-b-[12px]' : ''}`}
+                className={`flex items-center justify-between w-full p-5 font-medium text-black border-2 border-black dark:text-gray-400  dark:hover:bg-gray-800 text-lg ${index === 0 ? 'rounded-t-[12px]' : ''} ${index === 3 ? 'rounded-b-[12px]' : ''}`}
                 onClick={() => toggleAccordion(index)}
               >
                 <span >{faq.question}</span>
@@ -50,7 +50,7 @@ function Landingfaqs() {
               </button>
             </h2>
             {openAccordion === index && (
-              <div className="p-5 border-r-2 border-l-2 border-black bg-[#ebfff6]">
+              <div className="p-5 border-r-2 border-l-2 text-lg border-black bg-[#ebfff6]">
                 <p>{faq.answer}</p>
               </div>
             )}

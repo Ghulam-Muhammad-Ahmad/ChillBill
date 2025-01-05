@@ -2,11 +2,11 @@ import Image from 'next/image';
 import Link from 'next/link';
 function Header() {
   return (
-    <nav className="bg-white dark:bg-gray-900 fixed w-full z-20 top-0 start-0 border-b-2 border-black dark:border-gray-600 z-50">
+    <nav className="bg-white dark:bg-gray-900 fixed w-full top-0 start-0 border-b-2 border-black dark:border-gray-600 z-50">
       <div className="max-w-screen-xl flex flex-wrap items-stretch justify-between mx-auto ">
         <Link href="/" className='border-black border-r-2 pr-5 py-3'>
           <div className="flex items-center space-x-3 rtl:space-x-reverse ">
-            <Image src="/chillbilllogo.png" alt="Flowbite Logo" width={192} height={32} />
+            <Image src="/chillbilllogo.png" priority alt="ChillBill Logo" width={192} height={32} />
           </div>
         </Link>
         <div className="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse gap-2 border-black border-l-2 justify-start items-center pl-5">

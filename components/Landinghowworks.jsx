@@ -9,25 +9,25 @@ function Landinghowworks() {
 <div className="flex justify-between mt-10 items-start cardmain">
 <div className="card w-fit flex justify-center items-center flex-col gap-3">
     <div className="iconitem hoverbordered p-5 border-black border-2 rounded-2xl shadow-lg">
-        <Image src="/step1.png" width={100} height={100} />
+        <Image src="/step1.png" width={100} height={100} alt='howtoworks' />
     </div>
         <h2 className='text-center text-3xl font-bold'>Signup / Login</h2>
 </div>
 <div className="card w-fit flex justify-center items-center flex-col gap-3">
     <div className="iconitem hoverbordered p-5 border-black border-2 rounded-2xl shadow-lg">
-        <Image src="/step2.png" width={100} height={100} />
+        <Image src="/step2.png" width={100} height={100} alt='howtoworks' />
     </div>
         <h2 className='text-center text-3xl font-bold'>Add Income <br></br>& Expense</h2>
 </div>
 <div className="card w-fit flex justify-center items-center flex-col gap-3">
     <div className="iconitem hoverbordered p-5 border-black border-2 rounded-2xl shadow-lg">
-        <Image src="/step3.png" width={100} height={100} />
+        <Image src="/step3.png" width={100} height={100} alt='howtoworks' />
     </div>
         <h2 className='text-center text-3xl font-bold'>Categorize Items</h2>
 </div>
 <div className="cardlast w-fit flex justify-center items-center flex-col gap-3">
     <div className="iconitem hoverbordered p-5 border-black border-2 rounded-2xl shadow-lg">
-        <Image src="/step4.png" width={100} height={100} />
+        <Image src="/step4.png" width={100} height={100} alt='howtoworks' />
     </div>
         <h2 className='text-center text-3xl font-bold'>Ask AI</h2>
 </div>
