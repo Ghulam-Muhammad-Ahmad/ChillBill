@@ -103,6 +103,7 @@ function Category() {
       name: 'ID',
       selector: (row) => row._id,
       sortable: true,
+      omit: true,
     },
     {
       name: 'Name',
@@ -117,7 +118,7 @@ function Category() {
     {
       name: 'Actions',
       cell: (row) => (
-        <div className="flex gap-2">
+        <div className="flex gap-2  csm:flex-col csm:py-3">
           <button
             onClick={() => handleEdit(row)}
             className="custom-button-v1"
@@ -139,7 +140,7 @@ function Category() {
     <>
       <DashboardLayout>
         <div>
-          <div className="flex justify-between items-center max-w-[1200px] mx-auto my-5">
+          <div className="flex justify-between items-center max-w-[1200px] mx-auto my-5 csm:px-2">
 
             <h1 className="text-3xl font-bold">
               Category List
@@ -155,10 +156,10 @@ function Category() {
             </Link>
           </div>
           <form
-            className="flex gap-3 justify-stretch max-w-[1200px] mx-auto my-5 items-center"
+            className="flex gap-3 justify-stretch max-w-[1200px] mx-auto my-5 items-center csm:px-2  csm:flex-col csm:py-3 csm:w-full"
             onSubmit={editCategory ? handleEditSave : handleAdd}
           >
-            <div className="mb-4 w-1/2">
+            <div className="mb-4 w-1/2 csm:w-full">
               <label
                 htmlFor="name"
                 className="block text-sm font-medium text-gray-700"
@@ -178,7 +179,7 @@ function Category() {
                 <p className="text-red-500 text-sm">{errors.name}</p>
               )}
             </div>
-            <div className="mb-4 w-1/2">
+            <div className="mb-4 w-1/2 csm:w-full">
               <label
                 htmlFor="type"
                 className="block text-sm font-medium text-gray-700"

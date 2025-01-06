@@ -4,7 +4,7 @@ import Image from 'next/image'
 
 function Landinggetstarted() {
   return (
-    <section className=" max-w-screen-xl mx-auto border-black border-2 rounded-[12px] text-black overflow-hidden hoverbordered text-center flex py-5 px-6 justify-center items-center ">
+    <section className=" max-w-screen-xl mx-auto csm:flex-col border-black border-2 rounded-[12px] text-black overflow-hidden hoverbordered text-center flex py-5 px-6 justify-center items-center ">
         <div className="text-start flex gap-2 flex-col">
     <h2 className="text-3xl  font-bold ">Ready to Get Started?</h2>
     <p className="text-lg">Join us today and start your journey. Whether you are looking to improve your skills, connect with like-minded individuals, or simply explore new opportunities, we have something for everyone. Don't wait any longer, take the first step towards a brighter future with us.</p>

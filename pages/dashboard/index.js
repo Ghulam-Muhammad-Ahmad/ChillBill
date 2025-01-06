@@ -68,11 +68,11 @@ const Dashboard = () => {
   return (
     <>
       <DashboardLayout>
-        <h1 className='text-center text-3xl font-bold pt-5'>Welcome {session?.user?.username}!</h1>
-        <div className='flex justify-center items-stretch max-w-[1200px] mx-auto my-5 gap-3'>
+        <h1 className='text-center text-3xl font-bold pt-5 csm:pt-2'>Welcome {session?.user?.username}!</h1>
+        <div className='flex justify-center items-stretch max-w-[1200px] mx-auto my-5 gap-3 csm:flex-col csm:px-4'>
           <DashboardIncome incomeData={incomeData} categoryData={categoryData} />
           <DashboardExpense expenseData={expenseData} categoryData={categoryData} />
-          <div className="dashcategory w-1/3 bg-[#a5a5a5] px-3 py-5 rounded-md">
+          <div className="dashcategory w-1/3 csm:w-full bg-[#a5a5a5] px-3 py-5 rounded-md">
             <div className='flex items-center justify-between'>
               <h2 className='text-2xl font-semibold'>Category ({categoryData.length})</h2>
               <Link href="/dashboard/category"><button className='flex items-center space-x-3 rtl:space-x-reverse bg-primary hover:bg-secondary focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 text-white'>

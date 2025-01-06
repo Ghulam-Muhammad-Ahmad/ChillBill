@@ -14,6 +14,9 @@ export default {
         primary: "#C82121",  // Your primary color
         secondary: "#38AF79",
       },
+      screens: {
+        csm: { max: '639px' }, // Mobile screens below 640px
+      },
     },
   },
   plugins: [

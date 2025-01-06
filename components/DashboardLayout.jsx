@@ -30,7 +30,7 @@ const DashboardLayout = ({ children }) => {
   return (
     <div>
       <DashboardHeader />
-      <main className='pt-[90px]'>{children}</main>
+      <main className='pt-[90px] csm:pt-2'>{children}</main>
     </div>
   );
 };

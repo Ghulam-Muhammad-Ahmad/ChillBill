@@ -2,14 +2,14 @@ import Image from 'next/image';
 import Link from 'next/link';
 function Header() {
   return (
-    <nav className="bg-white dark:bg-gray-900 fixed w-full top-0 start-0 border-b-2 border-black dark:border-gray-600 z-50">
+    <nav className="bg-white dark:bg-gray-900 csm:border-0 csm:py-2 csm:relative csm:px-2 fixed w-full top-0 start-0 border-b-2 border-black dark:border-gray-600 z-50">
       <div className="max-w-screen-xl flex flex-wrap items-stretch justify-between mx-auto ">
-        <Link href="/" className='border-black border-r-2 pr-5 py-3'>
+        <Link href="/" className='border-black border-r-2 csm:border-0 csm:w-full pr-5 py-3'>
           <div className="flex items-center space-x-3 rtl:space-x-reverse ">
             <Image src="/chillbilllogo.png" priority alt="ChillBill Logo" width={192} height={32} />
           </div>
         </Link>
-        <div className="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse gap-2 border-black border-l-2 justify-start items-center pl-5">
+        <div className="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse gap-2 border-black border-l-2 justify-start items-center pl-5 csm:border-0 csm:w-full csm:p-0 csm:justify-between">
           <Link href="/login" className="text-white bg-primary hover:bg-secondary focus:outline-none font-bold uppercase text-base px-[28px] py-[10px] rounded-[12px] border-2 border-black text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" style={{ boxShadow: '4px 4px 0 0 #000', transition: 'box-shadow 0.3s' }} onMouseEnter={(e) => e.currentTarget.style.boxShadow = 'none'} onMouseLeave={(e) => e.currentTarget.style.boxShadow = '4px 4px 0 0 #000'}>Login</Link>
           <Link href="/signup" className="text-white bg-primary hover:bg-secondary focus:outline-none font-bold uppercase text-base px-[28px] py-[10px] rounded-[12px] border-2 border-black text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" style={{ boxShadow: '4px 4px 0 0 #000', transition: 'box-shadow 0.3s' }} onMouseEnter={(e) => e.currentTarget.style.boxShadow = 'none'} onMouseLeave={(e) => e.currentTarget.style.boxShadow = '4px 4px 0 0 #000'}>SignUp</Link>
           <button data-collapse-toggle="navbar-sticky" type="button" className="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600" aria-controls="navbar-sticky" aria-expanded="false" style={{ boxShadow: '4px 4px 0 0 var(--black22)' }}>

@@ -15,8 +15,8 @@ function DashboardHeader() {
   };
 
   return (
-    <nav className="bg-white dark:bg-gray-900 fixed w-full z-20 top-0 start-0 border-b border-gray-200 dark:border-gray-600">
-    <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
+    <nav className="bg-white dark:bg-gray-900 fixed csm:relative w-full z-20 top-0 start-0 border-b border-gray-200 dark:border-gray-600">
+    <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4 csm:flex-col csm:gap-5">
     <Link href="/dashboard">
       <div className="flex items-center space-x-3 rtl:space-x-reverse">
           <Image src="/chillbilllogo.png" alt="Flowbite Logo" width={192} height={32} />

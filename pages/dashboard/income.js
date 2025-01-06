@@ -146,7 +146,7 @@ function Income() {
     {
       name: 'Actions',
       cell: (row) => (
-        <div className="flex gap-2">
+        <div className="flex gap-2 justify-center items-center csm:flex-col csm:py-3">
           <button
             onClick={() => handleEdit(row)}
             className="custom-button-v1"
@@ -168,7 +168,7 @@ function Income() {
     <>
     <DashboardLayout>
       <div>
-        <div className="flex justify-between items-center max-w-[1200px] mx-auto my-5">
+        <div className="flex justify-between items-center max-w-[1200px] csm:px-2 mx-auto my-5">
           <h1 className="text-3xl font-bold">Income List</h1>
           <Link href="/dashboard" className="flex items-center space-x-3 rtl:space-x-reverse bg-primary hover:bg-secondary focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
               <svg width="18" height="18" viewBox="0 0 382 336" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -181,7 +181,7 @@ function Income() {
             </Link>
         </div>
         <form
-          className="flex flex-wrap gap-3 justify-stretch max-w-[1200px] mx-auto my-5 items-center"
+          className="flex flex-wrap gap-3 justify-stretch max-w-[1200px] mx-auto my-5 items-center csm:px-2"
           onSubmit={editIncome ? handleEditSave : handleAdd}
         >
           <div className="mb-4 w-full sm:w-1/4">
