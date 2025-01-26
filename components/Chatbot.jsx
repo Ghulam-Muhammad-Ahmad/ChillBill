@@ -24,7 +24,7 @@ const ChatBot = () => {
 
     useEffect(() => {
         console.log('API Key:', process.env.NEXT_PUBLIC_GEMINI_API_KEY);
-        const genAIInstance = new GoogleGenerativeAI(process.env.NEXT_PUBLIC_GEMINI_API_KEY);
+        const genAIInstance = new GoogleGenerativeAI("AIzaSyAmD_PHEGt2ckZfg-iGZR9wDes4eyxKU0o");
         const genModel = genAIInstance.getGenerativeModel({ model: "gemini-2.0-flash-exp" });
         setGenAI(genAIInstance);
         setModel(genModel);
