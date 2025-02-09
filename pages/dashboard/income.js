@@ -1,11 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import { useSession } from 'next-auth/react';
 import DataTable from 'react-data-table-component';
 import DashboardLayout from '@/components/DashboardLayout';
 import Link from 'next/link';
+import { MonthContext } from '../monthContext';
 
 function Income() {
+  const {monthNumber} = useContext(MonthContext);
   const [incomes, setIncomes] = useState([]);
   const [categories, setCategories] = useState([]);
   const [amount, setAmount] = useState('');
@@ -14,12 +16,14 @@ function Income() {
   const [note, setNote] = useState('');
   const [errors, setErrors] = useState({});
   const [editIncome, setEditIncome] = useState(null);
+  const [searchTerm, setSearchTerm] = useState(''); // Added state for search term
   const { data: session } = useSession();
+  const [isAdding, setIsAdding] = useState(false); // Added state for button disable
 
   const fetchIncomes = async () => {
     try {
       const result = await axios.get('/api/income', {
-        params: { userEmail: session?.user?.email },
+        params: { userEmail: session?.user?.email, startDate: new Date(new Date().getFullYear(), monthNumber - 1, 1).toISOString(), endDate: new Date(new Date().getFullYear(), monthNumber, 0).toISOString() },
       });
       setIncomes(result.data);
     } catch (error) {
@@ -44,7 +48,7 @@ function Income() {
       fetchCategories();
     }
     document.title = "Incomes | ChillBill";
-  }, [session]);
+  }, [session, monthNumber]);
 
   const validateForm = () => {
     const newErrors = {};
@@ -59,6 +63,7 @@ function Income() {
     e.preventDefault();
     if (!validateForm()) return;
 
+    setIsAdding(true); // Disable button and change text
     try {
       const response = await axios.post('/api/income', {
         userEmail: session?.user?.email,
@@ -67,7 +72,7 @@ function Income() {
         date,
         note: note.trim(),
       });
-      setIncomes([...incomes, response.data]);
+      setIncomes([response.data, ...incomes]);
       setAmount('');
       setCategoryId('');
       setDate('');
@@ -75,6 +80,8 @@ function Income() {
       setErrors({});
     } catch (error) {
       console.error('Error adding income:', error);
+    } finally {
+      setIsAdding(false); // Re-enable button and change text back
     }
   };
 
@@ -82,6 +89,7 @@ function Income() {
     e.preventDefault();
     if (!validateForm()) return;
 
+    setIsAdding(true); // Disable button and change text
     try {
       const response = await axios.put(`/api/income/?id=${editIncome._id}`, {
         ...editIncome,
@@ -103,6 +111,8 @@ function Income() {
       setErrors({});
     } catch (error) {
       console.error('Error editing income:', error);
+    } finally {
+      setIsAdding(false); // Re-enable button and change text back
     }
   };
 
@@ -164,6 +174,14 @@ function Income() {
     },
   ];
 
+  // Function to filter incomes based on search term
+  const filteredIncomes = incomes.filter(income =>
+    income.amount.toString().includes(searchTerm) ||
+    income.categoryId.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    new Date(income.date).toLocaleDateString().includes(searchTerm) ||
+    income.note.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
     <>
     <DashboardLayout>
@@ -187,11 +205,11 @@ function Income() {
           <div className="mb-4 w-full sm:w-1/4">
             <label htmlFor="amount" className="block text-sm font-medium text-gray-700">Amount ({session?.user?.currency})</label>
             <input
-              type="number"
+              type="text"
               name="amount"
               id="amount"
-              value={amount}
-              onChange={(e) => setAmount(e.target.value)}
+              value={new Intl.NumberFormat().format(amount)}
+              onChange={(e) => setAmount(e.target.value.replace(/[^0-9]/g, ''))}
               className={`mt-1 block w-full pl-3 pr-3 py-2 border ${
                 errors.amount ? 'border-red-500' : 'border-gray-300'
               } rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm`}
@@ -243,15 +261,30 @@ function Income() {
               className="mt-1 block w-full pl-3 pr-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
             />
           </div>
-          <button type="submit" className="mt-4 custom-button-v1">
-            {editIncome ? 'Save Changes' : 'Add Income'}
+          <button type="submit" className={`mt-4 custom-button-v1 ${isAdding ? 'cursor-not-allowed' : ''}`} disabled={isAdding}>
+            {isAdding ? 'Adding' : editIncome ? 'Save Changes' : 'Add Income'}
           </button>
         </form>
+        <div className="flex flex-col gap-1 max-w-[1200px] mx-auto my-5 items-start px-2 py-3 w-full">
+          <label
+            htmlFor="search"
+            className="block text-sm font-medium text-gray-700"
+          >
+            Search
+          </label>
+          <input
+            type="text"
+            id="search"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="mt-1 block pl-3 pr-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+          />
+        </div>
         <DataTable
           title=""
           className="max-w-[1200px] mx-auto my-5 bg-white shadow-xl rounded-lg capitalize"
           columns={columns}
-          data={incomes}
+          data={filteredIncomes}
         />
       </div>
     </DashboardLayout>

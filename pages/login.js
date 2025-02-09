@@ -21,7 +21,7 @@ export default function login() {
 
   return (
     <section className="h-screen flex">
-      <div className="loginform flex justify-center items-center flex-col px-8 w-[60%] csm:w-full csm:bg-[#c821213f]" >
+      <div className="loginform flex justify-center items-center flex-col px-8 w-[60%] csm:w-full csm:bg-[#fff]" >
                         <h2 className="text-center font-bold text-3xl">Login</h2>
                         <p className="text-center w-3/4 text-md pb-5">Manage your finances effectively with our budget management project.</p>
                         <LoginForm />

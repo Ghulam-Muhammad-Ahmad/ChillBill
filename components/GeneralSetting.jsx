@@ -1,5 +1,6 @@
 import { useSession, signIn } from 'next-auth/react';
 import React, { useState, useEffect } from 'react';
+import PasswordInput from './PasswordInput'; // Import PasswordInput component
 function GeneralSetting({ settingstate }) {
   const { data: session } = useSession(); // Get session data
   const [username, setUsername] = useState('');
@@ -95,19 +96,12 @@ function GeneralSetting({ settingstate }) {
           />
         </div>
         <div className="mb-5 w-full">
-          <label
-            htmlFor="password"
-            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-          >
-            Password
-          </label>
-          <input
-            type="password"
+          <PasswordInput
+            label="Password"
             id="password"
             value={password}
-            className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-secondary focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-secondary dark:focus:border-secondary dark:shadow-sm-light"
-            required
             onChange={(e) => setPassword(e.target.value)}
+            required
           />
         </div>
         {error && <p className="text-red-500 text-sm mb-3">{error}</p>}

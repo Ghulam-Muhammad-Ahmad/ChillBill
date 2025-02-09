@@ -7,15 +7,15 @@
   --foreground: #171717;
 }
 
-@media (prefers-color-scheme: dark) {
+/* @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
   }
-}
+} */
 @font-face {
   font-family: 'CustomFont';
-  src: url('customfont.ttf') format('truetype');
+  src: url('Outfit.ttf') format('truetype');
 }
 
 
@@ -73,3 +73,21 @@ font-weight:600;
   outline:5px solid #fff;
   z-index:20 !important;
 }
+/* .datesdropdown{
+  appearance: none;
+position: relative;
+}
+.datesdropdown:after{
+content: "";
+width: 25px;
+height: 25px;
+position: absolute;
+top:50%;
+right: 10px;
+background-color: red;
+}
+
+*/
+select.datesdropdown:not([size]) {
+  background-image: url('/arrow.svg') !important;
+} 

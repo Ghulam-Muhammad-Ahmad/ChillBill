@@ -37,12 +37,27 @@ export default async (req, res) => {
         res.status(400).json({ success: false, message: error.message });
       }
       break;
+    case 'DELETE':
+      try {
+        if (!req.query.userEmail) {
+          res.status(400).json({ success: false, message: 'Email is required' });
+          return;
+        }
+        const deletedChats = await Chat.deleteMany({ userEmail: req.query.userEmail });
+        if (!deletedChats) {
+          res.status(404).json({ success: false, message: 'Chat not found' });
+          return;
+        }
+        res.status(200).json({ success: true, data: deletedChats });
+      } catch (error) {
+        res.status(400).json({ success: false, message: error.message });
+      }
+      break;
     default:
       res.status(400).json({ success: false });
       break;
   }
 }
-
 
 
 

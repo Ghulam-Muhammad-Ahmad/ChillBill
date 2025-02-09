@@ -1,25 +1,32 @@
 "use client"
 import DashboardLayout from '@/components/DashboardLayout';
 import Link from 'next/link';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { useSession } from 'next-auth/react';
 import DashboardExpense from '@/components/DashboardExpense';
 import axios from 'axios';
 import DashboardIncome from '@/components/DashboardIncome';
+import { MonthContext } from '../monthContext';
 
 const Dashboard = () => {
-  const [daterange, setDaterange] = useState({
-    startDate: new Date(new Date().getFullYear(), 0, 1).toISOString(),
-    endDate: new Date(new Date().getFullYear(), 0, 1).toISOString()
-  });
-
+  const { monthNumber, updateMonthNumber  } = useContext(MonthContext);
+// console.log("month:" + monthNumber)
   const [categoryData, setCategoryData] = useState([]);
   const [expenseData, setExpenseData] = useState([]);
   const [incomeData, setIncomeData] = useState([]);
   const [budget, setBudget] = useState(0);
   const { data: session } = useSession();
 
+  const [daterange, setDaterange] = useState({
+    startDate: new Date(new Date().getFullYear(), monthNumber - 1, 1).toISOString(),
+    endDate: new Date(new Date().getFullYear(), monthNumber, 0).toISOString()
+  });
+
   useEffect(() => {
+    setDaterange({
+      startDate: new Date(new Date().getFullYear(), monthNumber - 1, 1).toISOString(),
+      endDate: new Date(new Date().getFullYear(), monthNumber, 0).toISOString()
+    })
     if (session?.user?.email) {
       const fetchData = async () => {
         try {
@@ -29,14 +36,14 @@ const Dashboard = () => {
           setCategoryData(categoryResponse.data);
 
           const expenseResponse = await axios.get('/api/expense', {
-            params: { userEmail: session?.user?.email },
+            params: { userEmail: session?.user?.email, startDate: daterange.startDate, endDate: daterange.endDate },
           });
           const fetchedExpenseData = expenseResponse.data;
           console.log('Fetched Expenses:', fetchedExpenseData); // Debugging
           setExpenseData(fetchedExpenseData);
 
           const incomeResponse = await axios.get('/api/income', {
-            params: { userEmail: session?.user?.email },
+            params: { userEmail: session?.user?.email, startDate: daterange.startDate, endDate: daterange.endDate },
           });
           const fetchedIncomeData = incomeResponse.data;
           console.log('Fetched Income:', fetchedIncomeData); // Debugging
@@ -63,11 +70,11 @@ const Dashboard = () => {
       fetchData();
       document.title = "Dashboard | ChillBill";
     }
-  }, [session?.user?.email]);
+  }, [session?.user?.email, daterange.startDate, daterange.endDate, monthNumber]);
 
   return (
     <>
-      <DashboardLayout>
+      <DashboardLayout monthNumber= {monthNumber} setMonthNumber={updateMonthNumber} >
         <h1 className='text-center text-3xl font-bold pt-5 csm:pt-2'>Welcome {session?.user?.username}!</h1>
         <div className='flex justify-center items-stretch max-w-[1200px] mx-auto my-5 gap-3 csm:flex-col csm:px-4'>
           <DashboardIncome incomeData={incomeData} categoryData={categoryData} />
@@ -79,12 +86,16 @@ const Dashboard = () => {
                 See Details
               </button></Link>
             </div>
-            {categoryData.map((category, index) => (
-              <div key={index} className='flex items-center justify-between'>
-                <p>{category.name}</p>
-                <p>{category.description}</p>
-              </div>
-            ))}
+            {categoryData.length > 0 ? (
+              categoryData.map((category, index) => (
+                <div key={index} className='flex items-center justify-between'>
+                  <p>{category.name}</p>
+                  <p>{category.description}</p>
+                </div>
+              ))
+            ) : (
+              <div className='min-h-[370px] text-center text-black font-semibold capitalize text-2xl flex justify-center items-center'>N/A</div>
+            )}
           </div>
         </div>
         <div className='text-center my-5 text-xl font-bold flex justify-center items-center flex-col'>

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useSession } from 'next-auth/react'; // Updated import
+import PasswordInput from './PasswordInput'; // Import PasswordInput component
 
 function ResetPasswordForm({settingstate}) {
   const [password, setPassword] = useState('');
@@ -35,6 +36,9 @@ function ResetPasswordForm({settingstate}) {
     } else {
       // Show success message
       console.log('Password reset successfully!');
+      setPassword('');
+      setRepeatPassword('');
+      setError('');
     }
   };
 
@@ -42,25 +46,21 @@ function ResetPasswordForm({settingstate}) {
     <div className={settingstate != "password" ? "hidden" : "shown"}>
     <form className="flex justify-center items-center flex-col max-w-[1200px] mx-auto my-5" onSubmit={handleSubmit}>
       <div className="mb-5 w-full">
-        <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">New password</label>
-        <input
-          type="password"
+        <PasswordInput
+          label="New password"
           id="password"
-          className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-secondary focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-secondary dark:focus:border-secondary dark:shadow-sm-light"
-          required
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          required
         />
       </div>
       <div className="mb-5 w-full">
-        <label htmlFor="repeat-password" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Repeat new password</label>
-        <input
-          type="password"
+        <PasswordInput
+          label="Repeat new password"
           id="repeat-password"
-          className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-secondary focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-secondary dark:focus:border-secondary dark:shadow-sm-light"
-          required
           value={repeatPassword}
           onChange={(e) => setRepeatPassword(e.target.value)}
+          required
         />
       </div>
       {error && <p className="text-red-500 text-sm mb-3">{error}</p>}

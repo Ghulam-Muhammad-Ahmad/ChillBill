@@ -11,7 +11,9 @@ function Category() {
   const [type, setType] = useState('');
   const [errors, setErrors] = useState({});
   const [editCategory, setEditCategory] = useState(null);
+  const [searchTerm, setSearchTerm] = useState(''); // Added state for search term
   const { data: session } = useSession();
+  const [isAdding, setIsAdding] = useState(false); // Added state for button disable
 
   const fetchData = async () => {
     try {
@@ -44,18 +46,21 @@ function Category() {
     e.preventDefault();
     if (!validateForm()) return;
 
+    setIsAdding(true); // Disable button and change text
     try {
       const response = await axios.post('/api/category', {
         name: name.trim(),
         type: type.trim(),
         userEmail: session?.user?.email,
       });
-      setCategories([...categories, response.data]);
+      setCategories([response.data, ...categories]);
       setName('');
       setType('');
       setErrors({});
     } catch (error) {
       console.error('Error adding category:', error);
+    } finally {
+      setIsAdding(false); // Re-enable button and change text back
     }
   };
 
@@ -136,6 +141,12 @@ function Category() {
     },
   ];
 
+  // Function to filter categories based on search term
+  const filteredCategories = categories.filter(category =>
+    category.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    category.type.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
     <>
       <DashboardLayout>
@@ -155,6 +166,7 @@ function Category() {
               <span className="text-white">Go Back</span>
             </Link>
           </div>
+         
           <form
             className="flex gap-3 justify-stretch max-w-[1200px] mx-auto my-5 items-center csm:px-2  csm:flex-col csm:py-3 csm:w-full"
             onSubmit={editCategory ? handleEditSave : handleAdd}
@@ -202,15 +214,30 @@ function Category() {
                 <p className="text-red-500 text-sm">{errors.type}</p>
               )}
             </div>
-            <button type="submit" className="mt-4 custom-button-v1 w-[30%]">
-              {editCategory ? 'Save Changes' : 'Add'}
+            <button type="submit" className={`mt-4 custom-button-v1 w-[30%] ${isAdding ? 'cursor-not-allowed' : ''}`} disabled={isAdding}>
+              {isAdding ? 'Adding' : editCategory ? 'Save Changes' : 'Add'}
             </button>
           </form>
+          <div className="flex flex-col gap-1 max-w-[1200px] mx-auto my-5 items-start px-2 py-3 w-full">
+            <label
+              htmlFor="search"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Search
+            </label>
+            <input
+              type="text"
+              id="search"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            className="mt-1 block pl-3 pr-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+            />
+          </div>
           <DataTable
             title=""
             className="max-w-[1200px] mx-auto my-5 bg-white shadow-xl rounded-lg capitalize"
             columns={columns}
-            data={categories}
+            data={filteredCategories}
           />
         </div>
       </DashboardLayout>

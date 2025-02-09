@@ -8,11 +8,14 @@ export default async function handler(req, res) {
 
   try {
     switch (method) {
-      case 'GET': // Fetch all income records
-        if (!query.userEmail) {
-          return res.status(400).json({ error: 'User email is required' })
+      case 'GET': // Fetch all income records within a date range, with recent items first
+        if (!query.userEmail || !query.startDate || !query.endDate) {
+          return res.status(400).json({ error: 'User email, start date, and end date are required' })
         }
-        const incomes = await Income.find({ userEmail: query.userEmail })
+        const incomes = await Income.find({ 
+          userEmail: query.userEmail, 
+          date: { $gte: new Date(query.startDate), $lte: new Date(query.endDate) } 
+        }).sort({ date: -1 }) // Sort by date in descending order to get recent items first
         res.status(200).json(incomes)
         break
 

@@ -20,6 +20,18 @@ const DoughnutChart = ({ data, currency }) => {
   const labels = Object.keys(categoryMap);
   const amounts = Object.values(categoryMap);
 
+  // Check if data is empty
+  if (labels.length === 0) {
+    return <div className='flex justify-center items-center' dangerouslySetInnerHTML={{ __html: `
+   <svg width="375" height="381" viewBox="0 0 375 381" fill="none" xmlns="http://www.w3.org/2000/svg">
+<ellipse cx="187.5" cy="190.5" rx="187.5" ry="190.5" fill="#C3C3C3"/>
+<ellipse cx="187.5" cy="189" rx="77.5" ry="79" fill="#D6D6D6"/>
+</svg>
+
+
+    ` }} />; // Use the SVG placeholder for empty data
+  }
+
   // Chart.js data object
   const chartData = {
     labels: labels,

@@ -21,7 +21,7 @@ export default function Signup() {
 
     return (
         <>
-            <section className="h-screen flex csm:h-full csm:py-8 csm:bg-[#c821213f]">
+            <section className="h-screen flex csm:h-full csm:py-8 csm:bg-[#fff]">
                 <div className="signupimg bg-secondary w-[40%] flex justify-center items-center csm:hidden">
                     <Image src="/adult-with-loths-money.jpg" alt="Signup Vector" width={500} height={500} className="w-full h-full object-cover" />
                 </div>

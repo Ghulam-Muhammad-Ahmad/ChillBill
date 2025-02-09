@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import PasswordInput from './PasswordInput';
 
 function SignUpForm() {
-const router = useRouter();
+  const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [repeatPassword, setRepeatPassword] = useState('');
@@ -45,20 +46,19 @@ const router = useRouter();
     } else {
       // Redirect or show success message
       console.log('User registered successfully!');
-  
-    router.push('/login');
+
+      router.push('/login');
     }
   };
 
   return (
-    <form className="flex justify-center items-center flex-col w-full" onSubmit={handleSubmit}>
+    <form className="flex justify-center items-center flex-col w-fit min-w-[70%]" onSubmit={handleSubmit}>
       <div className="mb-5 w-full">
         <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your email</label>
         <input
           type="email"
           id="email"
           className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-secondary focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-secondary dark:focus:border-secondary dark:shadow-sm-light"
-          placeholder="name@flowbite.com"
           required
           value={email}
           onChange={(e) => setEmail(e.target.value)}
@@ -70,7 +70,6 @@ const router = useRouter();
           type="text"
           id="username"
           className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-secondary focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-secondary dark:focus:border-secondary dark:shadow-sm-light"
-          placeholder="Your username"
           required
           value={username}
           onChange={(e) => setUsername(e.target.value)}
@@ -82,37 +81,41 @@ const router = useRouter();
           type="text"
           id="currency"
           className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-secondary focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-secondary dark:focus:border-secondary dark:shadow-sm-light"
-          placeholder="Your currency"
           maxLength="5"
           required
           value={currency}
           onChange={(e) => setCurrency(e.target.value)}
         />
       </div>
-      <div className="mb-5 w-full">
-        <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your password</label>
-        <input
-          type="password"
-          id="password"
-          className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-secondary focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-secondary dark:focus:border-secondary dark:shadow-sm-light"
-          required
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          autoComplete="on"
-        />
-      </div>
-      <div className="mb-5 w-full">
-        <label htmlFor="repeat-password" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Repeat password</label>
-        <input
-          type="password"
-          id="repeat-password"
-          className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-secondary focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-secondary dark:focus:border-secondary dark:shadow-sm-light"
-          required
-          value={repeatPassword}
-          onChange={(e) => setRepeatPassword(e.target.value)}
-          autoComplete="on"
-        />
-      </div>
+      <PasswordInput
+        label="Your password"
+        id="password"
+        name="password"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+        className="custom-wrapper-class"
+        inputClassName="custom-input-class"
+        required
+        autoComplete="on"
+      // You can even pass custom icons:
+      // showIcon={<CustomShowIcon />}
+      // hideIcon={<CustomHideIcon />}
+      />
+        <PasswordInput
+        label="Repeat password"
+        id="repeat-password"
+        name="repeat-password"
+        value={repeatPassword}
+        onChange={(e) => setRepeatPassword(e.target.value)}
+        className="custom-wrapper-class"
+        inputClassName="custom-input-class"
+        required
+        autoComplete="on"
+      // You can even pass custom icons:
+      // showIcon={<CustomShowIcon />}
+      // hideIcon={<CustomHideIcon />}
+      />
+      
       <div className="flex items-start mb-5 w-full">
         <div className="flex items-center h-5">
           <input

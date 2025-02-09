@@ -1,11 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import { useSession } from 'next-auth/react';
 import DataTable from 'react-data-table-component';
 import DashboardLayout from '@/components/DashboardLayout';
 import Link from 'next/link';
+import { MonthContext } from '../monthContext';
 
 function Expense() {
+  const { monthNumber } = useContext(MonthContext);
   const [expenses, setExpenses] = useState([]);
   const [categories, setCategories] = useState([]);
   const [amount, setAmount] = useState('');
@@ -14,12 +16,18 @@ function Expense() {
   const [description, setDescription] = useState('');
   const [errors, setErrors] = useState({});
   const [editExpense, setEditExpense] = useState(null);
+  const [searchTerm, setSearchTerm] = useState(''); // Added state for search term
   const { data: session } = useSession();
+  const [isAdding, setIsAdding] = useState(false); // Added state for button disable
 
   const fetchExpenses = async () => {
     try {
       const result = await axios.get('/api/expense', {
-        params: { userEmail: session?.user?.email },
+        params: {
+          userEmail: session?.user?.email,
+          startDate: new Date(new Date().getFullYear(), monthNumber - 1, 1).toISOString(),
+          endDate: new Date(new Date().getFullYear(), monthNumber, 0).toISOString()
+        },
       });
       setExpenses(result.data);
     } catch (error) {
@@ -45,7 +53,7 @@ function Expense() {
     }
     document.title = "Expenses | ChillBill";
 
-  }, [session]);
+  }, [session, monthNumber]);
 
   const validateForm = () => {
     const newErrors = {};
@@ -60,6 +68,8 @@ function Expense() {
     e.preventDefault();
     if (!validateForm()) return;
 
+    setIsAdding(true); // Disable button on click
+
     try {
       const response = await axios.post('/api/expense', {
         userEmail: session?.user?.email,
@@ -68,7 +78,7 @@ function Expense() {
         date,
         description: description.trim(),
       });
-      setExpenses([...expenses, response.data]);
+      setExpenses([response.data, ...expenses]);
       setAmount('');
       setCategoryId('');
       setDate('');
@@ -76,12 +86,16 @@ function Expense() {
       setErrors({});
     } catch (error) {
       console.error('Error adding expense:', error);
+    } finally {
+      setIsAdding(false); // Re-enable button after response
     }
   };
 
   const handleEditSave = async (e) => {
     e.preventDefault();
     if (!validateForm()) return;
+
+    setIsAdding(true); // Disable button on click
 
     try {
       const response = await axios.put(`/api/expense/?id=${editExpense._id}`, {
@@ -104,6 +118,8 @@ function Expense() {
       setErrors({});
     } catch (error) {
       console.error('Error editing expense:', error);
+    } finally {
+      setIsAdding(false); // Re-enable button after response
     }
   };
 
@@ -165,14 +181,19 @@ function Expense() {
     },
   ];
 
+  // Function to filter expenses based on search term
+  const filteredExpenses = expenses.filter(expense =>
+    expense.description.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
     <>
-    <DashboardLayout>
-      <div>
-        <div className="flex justify-between items-center max-w-[1200px] csm:px-2 mx-auto my-5 ">
+      <DashboardLayout>
+        <div>
+          <div className="flex justify-between items-center max-w-[1200px] csm:px-2 mx-auto my-5 ">
 
-          <h1 className="text-3xl font-bold">Expense List</h1>
-          <Link href="/dashboard" className="flex items-center space-x-3 rtl:space-x-reverse bg-primary hover:bg-secondary focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+            <h1 className="text-3xl font-bold">Expense List</h1>
+            <Link href="/dashboard" className="flex items-center space-x-3 rtl:space-x-reverse bg-primary hover:bg-secondary focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
               <svg width="18" height="18" viewBox="0 0 382 336" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M103.881 176C100.207 175.993 96.6479 174.721 93.8009 172.4L6.92086 100.64C5.28743 99.3089 3.93294 97.6685 2.93516 95.8128C1.93738 93.9571 1.31595 91.9225 1.10656 89.826C0.897159 87.7294 1.10391 85.6121 1.71495 83.5957C2.32599 81.5793 3.32929 79.7034 4.66723 78.0757C6.00518 76.4481 7.65142 75.1007 9.51147 74.111C11.3715 73.1212 13.4087 72.5086 15.5062 72.3083C17.6036 72.108 19.72 72.3239 21.7337 72.9437C23.7475 73.5634 25.619 74.5748 27.2409 75.9198L114.121 147.36C117.381 150.059 119.439 153.94 119.844 158.154C120.249 162.367 118.968 166.569 116.281 169.84C114.807 171.73 112.928 173.264 110.782 174.331C108.635 175.397 106.277 175.967 103.881 176Z" fill="white" />
                 <path d="M16.9999 104C13.693 104.01 10.4643 102.995 7.75782 101.095C5.05133 99.1951 3.00007 96.5031 1.88618 93.3895C0.772298 90.2758 0.650527 86.8936 1.53761 83.7079C2.42469 80.5223 4.27705 77.6897 6.83988 75.5999L93.7999 4.55992C97.0803 1.8871 101.286 0.622594 105.496 1.04313C109.707 1.46366 113.579 3.53499 116.266 6.80382C118.953 10.0727 120.236 14.2728 119.834 18.4851C119.432 22.6974 117.377 26.5788 114.12 29.2799L27.2399 100.64C24.3178 102.91 20.6991 104.098 16.9999 104Z" fill="white" />
@@ -181,82 +202,95 @@ function Expense() {
 
               <span className="text-white">Go Back</span>
             </Link>
-        </div>
-        <form
-          className="flex flex-wrap gap-3 justify-stretch max-w-[1200px] mx-auto my-5 items-center csm:px-2"
-          onSubmit={editExpense ? handleEditSave : handleAdd}
-        >
-          <div className="mb-4 w-full sm:w-1/4">
-            <label htmlFor="amount" className="block text-sm font-medium text-gray-700">Amount ({session?.user?.currency})</label>
-            <input
-              type="number"
-              name="amount"
-              id="amount"
-              value={amount}
-              onChange={(e) => setAmount(e.target.value)}
-              className={`mt-1 block w-full pl-3 pr-3 py-2 border ${
-                errors.amount ? 'border-red-500' : 'border-gray-300'
-              } rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm`}
-            />
-            {errors.amount && <p className="text-red-500 text-sm">{errors.amount}</p>}
           </div>
-          <div className="mb-4 w-full sm:w-1/4">
-            <label htmlFor="categoryId" className="block text-sm font-medium text-gray-700">Category</label>
-            <select
-              id="categoryId"
-              name="categoryId"
-              value={categoryId}
-              onChange={(e) => setCategoryId(e.target.value)}
-              className={`mt-1 block w-full pl-3 pr-10 py-2 text-base ${
-                errors.categoryId ? 'border-red-500' : 'border-gray-300'
-              } focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md`}
+          <form
+            className="flex flex-wrap gap-3 justify-stretch max-w-[1200px] mx-auto my-5 items-center csm:px-2"
+            onSubmit={editExpense ? handleEditSave : handleAdd}
+          >
+            <div className="mb-4 w-full sm:w-1/4">
+              <label htmlFor="amount" className="block text-sm font-medium text-gray-700">Amount ({session?.user?.currency})</label>
+              <input
+                type="text"
+                name="amount"
+                id="amount"
+                value={new Intl.NumberFormat().format(amount)}
+                onChange={(e) => setAmount(e.target.value.replace(/[^0-9]/g, ''))}
+                className={`mt-1 block w-full pl-3 pr-3 py-2 border ${errors.amount ? 'border-red-500' : 'border-gray-300'
+                  } rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm`}
+              />
+              {errors.amount && <p className="text-red-500 text-sm">{errors.amount}</p>}
+            </div>
+            <div className="mb-4 w-full sm:w-1/4">
+              <label htmlFor="categoryId" className="block text-sm font-medium text-gray-700">Category</label>
+              <select
+                id="categoryId"
+                name="categoryId"
+                value={categoryId}
+                onChange={(e) => setCategoryId(e.target.value)}
+                className={`mt-1 block w-full pl-3 pr-10 py-2 text-base ${errors.categoryId ? 'border-red-500' : 'border-gray-300'
+                  } focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md`}
+              >
+                <option value="">Select a category</option>
+                {categories.filter(cat => cat.type === 'expense').map((cat) => (
+                  <option key={cat._id} value={cat._id}>
+                    {cat.name}
+                  </option>
+                ))}
+              </select>
+              {errors.categoryId && <p className="text-red-500 text-sm">{errors.categoryId}</p>}
+            </div>
+            <div className="mb-4 w-full sm:w-1/4">
+              <label htmlFor="date" className="block text-sm font-medium text-gray-700">Date</label>
+              <input
+                type="date"
+                name="date"
+                id="date"
+                value={date}
+                onChange={(e) => setDate(e.target.value)}
+                className={`mt-1 block w-full pl-3 pr-3 py-2 border ${errors.date ? 'border-red-500' : 'border-gray-300'
+                  } rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm`}
+              />
+              {errors.date && <p className="text-red-500 text-sm">{errors.date}</p>}
+            </div>
+            <div className="mb-4 w-full sm:w-1/4">
+              <label htmlFor="description" className="block text-sm font-medium text-gray-700">Description</label>
+              <input
+                type="text"
+                name="description"
+                id="description"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                className="mt-1 block w-full pl-3 pr-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+              />
+            </div>
+            <button type="submit" className={`mt-4 custom-button-v1 ${isAdding ? 'cursor-not-allowed' : ''}`} disabled={isAdding}>
+              {isAdding ? 'Adding' : editExpense ? 'Save Changes' : 'Add Expense'}
+            </button>
+          </form>
+          <div className="flex flex-col gap-1 max-w-[1200px] mx-auto my-5 items-start px-2 py-3 w-full">
+            <label
+              htmlFor="search"
+              className="block text-sm font-medium text-gray-700"
             >
-              <option value="">Select a category</option>
-              {categories.filter(cat => cat.type === 'expense').map((cat) => (
-                <option key={cat._id} value={cat._id}>
-                  {cat.name}
-                </option>
-              ))}
-            </select>
-            {errors.categoryId && <p className="text-red-500 text-sm">{errors.categoryId}</p>}
-          </div>
-          <div className="mb-4 w-full sm:w-1/4">
-            <label htmlFor="date" className="block text-sm font-medium text-gray-700">Date</label>
-            <input
-              type="date"
-              name="date"
-              id="date"
-              value={date}
-              onChange={(e) => setDate(e.target.value)}
-              className={`mt-1 block w-full pl-3 pr-3 py-2 border ${
-                errors.date ? 'border-red-500' : 'border-gray-300'
-              } rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm`}
-            />
-            {errors.date && <p className="text-red-500 text-sm">{errors.date}</p>}
-          </div>
-          <div className="mb-4 w-full sm:w-1/4">
-            <label htmlFor="description" className="block text-sm font-medium text-gray-700">Description</label>
+              Search
+            </label>
             <input
               type="text"
-              name="description"
-              id="description"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              className="mt-1 block w-full pl-3 pr-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+              id="search"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="mt-1 block pl-3 pr-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+
             />
           </div>
-          <button type="submit" className="mt-4 custom-button-v1">
-            {editExpense ? 'Save Changes' : 'Add Expense'}
-          </button>
-        </form>
-        <DataTable
-          title=""
-          className="max-w-[1200px] mx-auto my-5 bg-white shadow-xl rounded-lg capitalize"
-          columns={columns}
-          data={expenses}
-        />
-      </div>
-    </DashboardLayout>
+          <DataTable
+            title=""
+            className="max-w-[1200px] mx-auto my-5 bg-white shadow-xl rounded-lg capitalize"
+            columns={columns}
+            data={filteredExpenses}
+          />
+        </div>
+      </DashboardLayout>
     </>
   );
 }
