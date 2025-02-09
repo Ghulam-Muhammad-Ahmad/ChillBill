@@ -4,7 +4,8 @@ import { useSession } from 'next-auth/react';
 import DataTable from 'react-data-table-component';
 import DashboardLayout from '@/components/DashboardLayout';
 import Link from 'next/link';
-import { MonthContext } from '../monthContext';
+import { MonthContext } from '@/context/monthContext';
+
 
 function Expense() {
   const { monthNumber } = useContext(MonthContext);

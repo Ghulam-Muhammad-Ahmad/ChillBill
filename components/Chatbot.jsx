@@ -4,13 +4,12 @@ import { useSession } from 'next-auth/react';
 import axios from 'axios';
 import Image from 'next/image';
 import dotenv from 'dotenv';
-import { MonthContext } from '@/pages/monthContext';
+
 
 dotenv.config();
 
-const ChatBot = () => {
+const ChatBot = ({monthNumber}) => {
     const { data: session } = useSession();
-    const { monthNumber } = useContext(MonthContext); // Use the context to get monthNumber
     const [chatHistory, setChatHistory] = useState([]);
     const [genAI, setGenAI] = useState(null);
     const [model, setModel] = useState(null);

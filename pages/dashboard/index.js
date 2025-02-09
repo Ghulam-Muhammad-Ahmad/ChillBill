@@ -6,7 +6,7 @@ import { useSession } from 'next-auth/react';
 import DashboardExpense from '@/components/DashboardExpense';
 import axios from 'axios';
 import DashboardIncome from '@/components/DashboardIncome';
-import { MonthContext } from '../monthContext';
+import { MonthContext } from '@/context/monthContext';
 
 const Dashboard = () => {
   const { monthNumber, updateMonthNumber  } = useContext(MonthContext);

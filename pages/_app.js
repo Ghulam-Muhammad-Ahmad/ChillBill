@@ -2,7 +2,7 @@
 import { SessionProvider } from 'next-auth/react'; // Import SessionProvider
 import '../styles/globals.css'; // Your global styles
 import '../styles/marquee.css'
-import { MonthProvider } from './monthContext'; // Import MonthProvider
+import { MonthProvider } from '@/context/monthContext';
 
 function MyApp({ Component, pageProps }) {
   return (

@@ -1,7 +1,10 @@
 import Chatbot from '@/components/Chatbot'
 import DashboardLayout from '@/components/DashboardLayout'
-import React, { useEffect } from 'react'
+import { MonthContext } from '@/context/monthContext';
+import React, { useContext, useEffect } from 'react'
+
 function aisection() {
+  const {monthNumber} = useContext(MonthContext);
   useEffect(() => {
     document.title = 'Ask AI | Dashboard'
 
@@ -10,7 +13,7 @@ function aisection() {
   return (
     <>
     <DashboardLayout>
-<Chatbot />
+<Chatbot monthNumber={monthNumber}  />
     </DashboardLayout>
   </>
   )
