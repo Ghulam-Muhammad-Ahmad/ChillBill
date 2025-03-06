@@ -19,7 +19,7 @@ function Income() {
   const [searchTerm, setSearchTerm] = useState(''); // Added state for search term
   const { data: session } = useSession();
   const [isAdding, setIsAdding] = useState(false); // Added state for button disable
-
+// console.log(monthNumber);
   const fetchIncomes = async () => {
     try {
       const result = await axios.get('/api/income', {

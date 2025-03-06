@@ -1,22 +1,19 @@
-import Chatbot from '@/components/Chatbot'
-import DashboardLayout from '@/components/DashboardLayout'
-import { MonthContext } from '@/context/monthContext';
-import React, { useContext, useEffect } from 'react'
+import Chatbot from "@/components/Chatbot";
+import DashboardLayout from "@/components/DashboardLayout";
+import React, { useEffect } from "react";
 
 function aisection() {
-  const {monthNumber} = useContext(MonthContext);
   useEffect(() => {
-    document.title = 'Ask AI | Dashboard'
+    document.title = "Ask AI | Dashboard";
+  }, []);
 
-  }, [])
-  
   return (
     <>
-    <DashboardLayout>
-<Chatbot monthNumber={monthNumber}  />
-    </DashboardLayout>
-  </>
-  )
+      <DashboardLayout>
+        <Chatbot />
+      </DashboardLayout>
+    </>
+  );
 }
 
-export default aisection
+export default aisection;

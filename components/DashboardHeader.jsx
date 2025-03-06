@@ -1,11 +1,12 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { signOut } from 'next-auth/react';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
+import { MonthContext } from '@/context/monthContext';
 
-function DashboardHeader({monthNumber, setMonthNumber}) {
+function DashboardHeader() {
   const [showConfirm, setShowConfirm] = useState(false);
-
+const {monthNumber, updateMonthNumber } = useContext(MonthContext);
   const handleLogout = () => {
     if (showConfirm) {
       signOut();
@@ -15,7 +16,7 @@ function DashboardHeader({monthNumber, setMonthNumber}) {
   };
 
   const handleMonthChange = (e) => {
-    setMonthNumber(e.target.value);
+    updateMonthNumber(e.target.value);
   };
 
   return (
