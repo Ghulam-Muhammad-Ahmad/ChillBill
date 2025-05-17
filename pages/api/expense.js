@@ -8,16 +8,37 @@ export default async function handler(req, res) {
 
   try {
     switch (method) {
-      case 'GET': // Fetch all expense records within a date range
-        if (!query.userEmail || !query.startDate || !query.endDate) {
-          return res.status(400).json({ error: 'User email, start date, and end date are required' })
+      case 'GET':
+        console.log("All Data: " + query.allData);
+      
+        if (!query.userEmail) {
+          return res.status(400).json({ error: 'User email is required' });
         }
-        const expenses = await Expense.find({ 
-          userEmail: query.userEmail, 
-          date: { $gte: new Date(query.startDate), $lte: new Date(query.endDate) } 
-        }).sort({ date: -1 })
-        res.status(200).json(expenses)
-        break
+      
+        const allData = query.allData === 'true';
+        let filter = { userEmail: query.userEmail };
+      
+        if (!allData) {
+          if (!query.startDate || !query.endDate) {
+            return res.status(400).json({ error: 'Start date and end date are required' });
+          }
+      
+          const startDate = new Date(query.startDate);
+          const endDate = new Date(query.endDate);
+          if (startDate >= endDate) {
+            return res.status(400).json({ error: 'Invalid date range' });
+          }
+      
+          endDate.setHours(23, 59, 59, 999);
+          filter.date = { $gte: startDate, $lte: endDate };
+        }
+      
+        console.log(filter);
+        const expenses = await Expense.find(filter).sort({ date: -1 });
+        res.status(200).json(expenses);
+        break;
+      
+      
 
       case 'POST': // Add a new expense record
         if (!req.body.userEmail || !req.body.amount || !req.body.categoryId || !req.body.date || !req.body.description) {

@@ -1,50 +1,104 @@
-import Image from 'next/image';
-import Link from 'next/link';
-import { signOut } from 'next-auth/react';
-import { useContext, useState } from 'react';
 import { MonthContext } from '@/context/monthContext';
+import React, { useContext, useState } from 'react';
+import { Menu, X } from 'lucide-react'; // Hamburger & close icons
+import Link from 'next/link';
+import { ArrowDown, BotIcon, ChartBarStackedIcon, LayoutDashboardIcon, LogOutIcon, Settings2, TrendingUp } from 'lucide-react';
+import { useRouter } from 'next/router';
 
 function DashboardHeader() {
-  const [showConfirm, setShowConfirm] = useState(false);
-const {monthNumber, updateMonthNumber } = useContext(MonthContext);
-  const handleLogout = () => {
-    if (showConfirm) {
-      signOut();
-    } else {
-      setShowConfirm(true);
-    }
-  };
+  const { monthNumber, updateMonthNumber } = useContext(MonthContext);
+  const [selectedMonth, setSelectedMonth] = useState(monthNumber);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const router = useRouter();
 
   const handleMonthChange = (e) => {
-    updateMonthNumber(e.target.value);
+    setSelectedMonth(parseInt(e.target.value));
   };
 
+  const handleFilterClick = () => {
+    updateMonthNumber(selectedMonth);
+    setIsMenuOpen(false); // close menu after filtering (optional)
+  };
+
+  const currentMonth = new Date().getMonth() + 1;
+
   return (
-    <nav className="bg-white dark:bg-gray-900 fixed csm:relative w-full z-20 top-0 start-0 border-b border-gray-200 dark:border-gray-600">
-    <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4 csm:flex-col csm:gap-5">
-    <Link href="/dashboard">
-      <div className="flex items-center space-x-3 rtl:space-x-reverse">
-          <Image src="/chillbilllogo.png" alt="Flowbite Logo" width={192} height={32} />
-      </div>
-    </Link>
-    <div className="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse gap-2 csm:flex-wrap csm:justify-center csm:items-center">
-        <Link href="/dashboard/setting" className="flex items-center space-x-3 rtl:space-x-reverse bg-primary hover:bg-secondary focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-            <Image src="/setting.svg" alt="Setting Icon" width={18} height={18} />
-            <span className="text-white">Setting</span>
-        </Link>
-        <button onClick={handleLogout} className="flex items-center space-x-3 rtl:space-x-reverse bg-primary hover:bg-secondary focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-            <Image src="/logout.svg" alt="Logout Icon" width={18} height={18} />
-            <span className="text-white">{showConfirm ? 'Confirm Logout' : 'Logout'}</span>
+    <div className="flex items-center justify-between pb-4 px-2 border-b-2 max-h-[15vh] csm:max-h-full csm:flex-col">
+      <div className="flex justify-between w-full items-center csm:mb-2">
+        <h1 className="text-2xl font-semibold capitalize">
+          {document.title.split('|')[0]}
+        </h1>
+        <button
+          onClick={() => setIsMenuOpen(!isMenuOpen)}
+          className="hidden csm:block"
+        >
+          {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
         </button>
-        <select value={monthNumber} onChange={handleMonthChange} className="bg-primary datesdropdown hover:bg-secondary focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-white csm:w-full placeholder-white dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" style={{color: '#fff'}}>
-            {Array.from({length: 12}, (_, i) => i + 1).map(month => (
-                <option key={month} value={month}>{new Date(2022, month - 1, 1).toLocaleString('default', { month: 'long' })}</option>
-            ))}
+      </div>
+
+      <div
+        className={`flex items-center gap-2  csm:w-full csm:items-start csm:transition-all csm:flex-col csm:duration-300 ${isMenuOpen ? 'csm:flex' : 'csm:hidden'
+          }`}
+      >
+        <div className="menuinheader hidden csm:flex csm:flex-col csm:w-full gap-2">
+          <Link href="/dashboard" legacyBehavior className='w-full'>
+            <div className={`flex w-full justify-start items-center text-black hover:bg-secondary hover:text-white gap-2 cursor-pointer p-2 rounded ${router.asPath === '/dashboard' ? 'bg-secondary text-white' : ''}`}>
+              <LayoutDashboardIcon /> <a className="">Dashboard</a>
+            </div>
+          </Link>
+
+          <Link href="/dashboard/category" legacyBehavior>
+            <div className={`flex justify-start items-center text-black hover:bg-secondary hover:text-white gap-2 cursor-pointer p-2 rounded ${router.asPath === '/dashboard/category' ? 'bg-secondary text-white' : ''}`}>
+              <ChartBarStackedIcon /> <a className="">Categories</a>
+            </div>
+          </Link>
+          <Link href="/dashboard/income" legacyBehavior>
+            <div className={`flex justify-start items-center text-black hover:bg-secondary hover:text-white gap-2 cursor-pointer p-2 rounded ${router.asPath === '/dashboard/income' ? 'bg-secondary text-white' : ''}`}>
+              <TrendingUp /> <a className="">Income</a>
+            </div>
+          </Link>
+          <Link href="/dashboard/expense" legacyBehavior>
+            <div className={`flex justify-start items-center text-black hover:bg-secondary hover:text-white gap-2 cursor-pointer p-2 rounded ${router.asPath === '/dashboard/expense' ? 'bg-secondary text-white' : ''}`}>
+              <ArrowDown /> <a className="">Expenses</a>
+            </div>
+          </Link>
+          <Link href="/dashboard/aisection" legacyBehavior>
+            <div className={`flex justify-start items-center text-black hover:bg-secondary hover:text-white gap-2 cursor-pointer p-2 rounded ${router.asPath === '/dashboard/aisection' ? 'bg-secondary text-white' : ''}`}>
+              <BotIcon /> <a className="">AI Chat</a>
+            </div>
+          </Link>
+          <Link href="/dashboard/setting" legacyBehavior>
+            <div className={`flex justify-start items-center text-black hover:bg-secondary hover:text-white gap-2 cursor-pointer p-2 rounded ${router.asPath === '/dashboard/setting' ? 'bg-secondary text-white' : ''}`}>
+              <Settings2 /><a className="">Setting</a>
+            </div>
+          </Link>
+        </div>
+        <select
+          value={selectedMonth}
+          onChange={handleMonthChange}
+          className="bg-transparent text-black p-2 min-w-[250px] csm:w-full rounded"
+        >
+          <option value="" disabled>
+            Select Month
+          </option>
+          <option value="-1">All Data</option>
+          {Array.from({ length: currentMonth }, (_, i) => i + 1).map((month) => (
+            <option key={month} value={month}>
+              {new Date(2022, month - 1, 1).toLocaleString('default', {
+                month: 'long',
+              })}
+            </option>
+          ))}
         </select>
+        <button
+          onClick={handleFilterClick}
+          className="ml-2 bg-primary hover:bg-secondary text-white py-2 px-4 rounded csm:ml-0"
+        >
+          Filter Data
+        </button>
+      </div>
     </div>
-    </div>
-  </nav>
-  )
+  );
 }
 
-export default DashboardHeader
+export default DashboardHeader;
