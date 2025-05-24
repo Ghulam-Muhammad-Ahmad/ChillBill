@@ -37,7 +37,7 @@ function DashboardHeader() {
       </div>
 
       <div
-        className={`flex items-center gap-2  csm:w-full csm:items-start csm:transition-all csm:flex-col csm:duration-300 ${isMenuOpen ? 'csm:flex' : 'csm:hidden'
+        className={`flex items-center gap-2 w-full justify-end csm:w-full csm:items-start csm:transition-all csm:flex-col csm:duration-300 ${isMenuOpen ? 'csm:flex' : 'csm:hidden'
           }`}
       >
         <div className="menuinheader hidden csm:flex csm:flex-col csm:w-full gap-2">
@@ -92,7 +92,7 @@ function DashboardHeader() {
         </select>
         <button
           onClick={handleFilterClick}
-          className="ml-2 bg-primary hover:bg-secondary text-white py-2 px-4 rounded csm:ml-0"
+          className="ml-2 bg-primary hover:bg-secondary text-white py-2 px-4 rounded csm:ml-0 w-fit"
         >
           Filter Data
         </button>

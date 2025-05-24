@@ -1,4 +1,4 @@
-import connect from '@/lib/mongodb'
+ import connect from '@/lib/mongodb'
 import Income from '../../models/Income'
 
 export default async function handler(req, res) {
@@ -37,23 +37,23 @@ export default async function handler(req, res) {
 
 
       case 'POST': // Add a new income record
-        if (!req.body.userEmail || !req.body.amount || !req.body.categoryId || !req.body.date || !req.body.note) {
-          return res.status(400).json({ error: 'All fields are required' })
+        if (!req.body.userEmail || !req.body.amount || !req.body.categoryId || !req.body.date) {
+          return res.status(400).json({ error: 'All required fields must be provided' })
         }
         const newIncome = new Income({
           userEmail: req.body.userEmail,
           amount: req.body.amount,
           categoryId: req.body.categoryId,
           date: req.body.date,
-          note: req.body.note
+          note: req.body.note || '', // Handle the empty description
         })
         await newIncome.save()
         res.status(201).json(newIncome)
         break
 
       case 'PUT': // Edit an income record
-        if (!req.body.userEmail || !req.body.amount || !req.body.categoryId || !req.body.date || !req.body.note) {
-          return res.status(400).json({ error: 'All fields are required' })
+        if (!req.body.userEmail || !req.body.amount || !req.body.categoryId || !req.body.date) {
+          return res.status(400).json({ error: 'All required fields must be provided' })
         }
         const updatedIncome = await Income.findByIdAndUpdate(query.id, req.body, { new: true })
         res.status(200).json(updatedIncome)

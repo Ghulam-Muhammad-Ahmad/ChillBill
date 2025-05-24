@@ -1,4 +1,4 @@
-import connect from '@/lib/mongodb'
+ import connect from '@/lib/mongodb'
 import Expense from '../../models/Expense'
 
 export default async function handler(req, res) {
@@ -41,7 +41,7 @@ export default async function handler(req, res) {
       
 
       case 'POST': // Add a new expense record
-        if (!req.body.userEmail || !req.body.amount || !req.body.categoryId || !req.body.date || !req.body.description) {
+        if (!req.body.userEmail || !req.body.amount || !req.body.categoryId || !req.body.date) {
           return res.status(400).json({ error: 'All fields are required' })
         }
         const newExpense = new Expense({
@@ -49,7 +49,7 @@ export default async function handler(req, res) {
           amount: req.body.amount,
           categoryId: req.body.categoryId,
           date: req.body.date,
-          description: req.body.description,
+          description: req.body.description || '', // Handle the empty description
         })
         await newExpense.save()
         res.status(201).json(newExpense)
