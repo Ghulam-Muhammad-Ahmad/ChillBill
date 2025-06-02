@@ -56,8 +56,8 @@ export default async function handler(req, res) {
         break
 
       case 'PUT': // Edit an expense record
-        if (!req.body.userEmail || !req.body.amount || !req.body.categoryId || !req.body.date || !req.body.description) {
-          return res.status(400).json({ error: 'All fields are required' })
+        if (!req.body.userEmail || !req.body.amount || !req.body.categoryId || !req.body.date) {
+          return res.status(400).json({ error: 'User email, amount, category ID, and date are required' })
         }
         const updatedExpense = await Expense.findByIdAndUpdate(query.id, req.body, { new: true })
         res.status(200).json(updatedExpense)

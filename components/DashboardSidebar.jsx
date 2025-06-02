@@ -45,6 +45,11 @@ function DashboardHeader() {
          <ArrowDown/> <a className="">Expenses</a>
         </div>
         </Link>
+        <Link href="/dashboard/reports" legacyBehavior>
+        <div className={`flex justify-start items-center text-black hover:bg-secondary hover:text-white gap-2 cursor-pointer p-2 rounded ${router.asPath === '/dashboard/reports' ? 'bg-secondary text-white' : ''}`}>
+          <ChartBarStackedIcon /> <a className="">Reports</a>
+        </div>
+        </Link>
         <Link href="/dashboard/aisection" legacyBehavior>
         <div className={`flex justify-start items-center text-black hover:bg-secondary hover:text-white gap-2 cursor-pointer p-2 rounded ${router.asPath === '/dashboard/aisection' ? 'bg-secondary text-white' : ''}`}>
           <BotIcon /> <a className="">AI Chat</a>

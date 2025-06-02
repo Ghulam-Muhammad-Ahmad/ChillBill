@@ -173,9 +173,10 @@ function Income() {
       <div className="max-w-[1200px] mx-auto px-4 py-6">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-2xl font-bold">View All Incomes</h2>
-          <button onClick={openAddModal} className="custom-button-v1">
-            Add Income
-          </button>
+            <button onClick={openAddModal} className="custom-button-v1">
+              Add Income
+            </button>
+
         </div>
 
         <div className="mb-4">
